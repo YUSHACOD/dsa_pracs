@@ -3,8 +3,8 @@
 
 typedef struct stack {
   int top;
-  int max_size;
   int *arr;
+  int MAX_SIZE;
 } stack;
 
 int stack_is_empty(stack *s) {
@@ -17,55 +17,67 @@ int stack_is_empty(stack *s) {
 
 int peek(stack *s) {
   if (s->top == -1) {
-    printf("The stack is empty.Exitting the program.\n");
+    printf("The stack is empty. Underflow. Exitting the program.\n");
     exit(1);
+  } else {
+    return s->arr[s->top];
   }
-  return s->arr[s->top];
 }
 
 int pop(stack *s) {
   if (s->top == -1) {
-    printf("The stack is empty.Exitting the program.\n");
+    printf("The stack is empty. Underflow. Exitting the program.\n");
     exit(1);
+  } else {
+    int temp = s->arr[s->top];
+    s->top -= 1;
+    return temp;
   }
-  int temp = s->arr[s->top];
-  s->top -= 1;
-  return temp;
 }
 
 void push(stack *s, int value) {
   if (s->top == -1) {
-    s->arr = (int *)calloc(10, sizeof(int));
-    s->max_size = 10;
-  } else if ((s->top + 1) == s->max_size) {
-    s->arr = (int *)realloc(s->arr, 2 * s->top * sizeof(int));
-    s->max_size = 2 * (s->top + 1);
+    s->arr = (int *)calloc(s->MAX_SIZE, sizeof(int));
+    s->top += 1;
+    s->arr[s->top] = value;
+  } else if (s->top == s->MAX_SIZE - 1) {
+    printf("No Space in stack. Overflow. Exitting the program...\n");
+    exit(1);
+  } else {
+    s->top += 1;
+    s->arr[s->top] = value;
   }
-  s->top += 1;
-  s->arr[s->top] = value;
 }
 
-void clear_stack(stack *s) {
-  s->top = -1;
-  s->arr = NULL;
-  s->max_size = 0;
+/*
+int main() {
+  stack s = {
+		.top = -1,
+	  .arr = NULL,
+	.MAX_SIZE = 15
+  };
+  
+  // For testing peek
+	 push(&s, 4);
+	 printf("Now at the top of the stack we have : %d\n",peek(&s));
+	 printf("Poping from the stack : %d\n",pop(&s));
+	 printf("Now at the top of the stack we have : %d\n",peek(&s));
+
+  // For testing pop
+  push(&s, 4);
+  printf("Now at the top of the stack we have : %d\n",peek(&s));
+  printf("Poping from the stack : %d\n",pop(&s));
+  printf("Now at the top of the stack we pop to get : %d\n",pop(&s));
+
+
+  // For testing push function
+  int c = 0;
+  for (int i = 6 + 0; i < 6 + 16; i++) {
+	  push(&s, i);
+	  printf("Now at the top of the stack we have : %d\n",peek(&s));
+	  printf("Count of pushes into stack : %d\n",1 + c++);
+  }
+  
+  return 0;
 }
-
-// int main() {
-//   stack s;
-//   clear_stack(&s);
-
-//   printf("Creating the stack...\n");
-//   for (int i = 0; i < 15; i++) {
-//     push(&s, 3);
-//     printf("Peeking value at %d : %d\n", s.top, peek(&s));
-//   }
-
-//   printf("Maxsize is %d.\n", s.max_size);
-//   for (int i = 15; i > -1; i--) {
-//     int t = s.top;
-//     printf("Poping value at %d : %d\n", t, pop(&s));
-//   }
-
-//   return 0;
-// }
+*/

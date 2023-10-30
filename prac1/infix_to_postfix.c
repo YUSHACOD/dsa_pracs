@@ -4,8 +4,11 @@
 
 int check_expresssion(char *expression, int length) {
 
-  stack temp;
-  clear_stack(&temp);
+  stack temp = {
+	  .top = -1,
+	  .arr = NULL,
+	  .MAX_SIZE = length
+	};
 
   for (int i = 0; i < length; i++) {
 
@@ -96,10 +99,16 @@ int precedence(char c) {
 char *convert_to_postfix(char *original_expression,
                          int original_expression_length) {
 
-  stack stash;
-  clear_stack(&stash);
-  stack resulting_expression;
-  clear_stack(&resulting_expression);
+  stack stash = {
+	  .top = -1,
+	  .arr = NULL,
+	  .MAX_SIZE = original_expression_length 
+  };
+  stack resulting_expression = {
+	  .top = -1,
+	  .arr = NULL,
+	  .MAX_SIZE = original_expression_length 
+  };
 
   for (int i = 0; i < original_expression_length; i++) {
 
