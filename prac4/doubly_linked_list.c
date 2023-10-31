@@ -175,9 +175,9 @@ void traverse(dll *list) {
 
 int main() {
 
-    dll list = {
-        .start = NULL
-};
+  dll list = {
+    .start = NULL
+  };
 
   printf("Testing insertion of the linked_list.\n");
   insert_at_start(&list, 5);

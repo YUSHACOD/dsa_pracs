@@ -13,7 +13,7 @@ document *new(char *title, int pages){
   return doc;
 }
 
-void drop(document *doc){
+void drop(document *doc) {
   free(doc);
 }
 

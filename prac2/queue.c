@@ -48,13 +48,8 @@ int checks(queue_t q) {
 
 // debug purpose only
 void display(queue_t q) {   
-  // see below for these magic constants
   size_t hdash = (1 + 7) * q.capacity + 1;
 
-  // dash as decoration
-  for(size_t i = 0; i < hdash; i++) {
-    printf("-");
-  }
   printf("\n\n");
   
   for(size_t i = 0; i < q.capacity; i++) {
