@@ -17,8 +17,7 @@ int stack_is_empty(stack *s) {
 
 int peek(stack *s) {
   if (s->top == -1) {
-    printf("The stack is empty. Underflow. Exitting the program.\n");
-    exit(1);
+    printf("The stack is empty. Underflow.\n");
   } else {
     return s->arr[s->top];
   }
@@ -26,8 +25,7 @@ int peek(stack *s) {
 
 int pop(stack *s) {
   if (s->top == -1) {
-    printf("The stack is empty. Underflow. Exitting the program.\n");
-    exit(1);
+    printf("The stack is empty. Underflow.\n");
   } else {
     int temp = s->arr[s->top];
     s->top -= 1;
@@ -41,15 +39,13 @@ void push(stack *s, int value) {
     s->top += 1;
     s->arr[s->top] = value;
   } else if (s->top == s->MAX_SIZE - 1) {
-    printf("No Space in stack. Overflow. Exitting the program...\n");
-    exit(1);
+    printf("No Space in stack. Overflow.\n");
   } else {
     s->top += 1;
     s->arr[s->top] = value;
   }
 }
 
-/*
 int main() {
   stack s = {
 		.top = -1,
@@ -58,19 +54,26 @@ int main() {
   };
   
   // For testing peek
-	 push(&s, 4);
+  printf("Testing peek function.\n");
+	push(&s, 4);
 	 printf("Now at the top of the stack we have : %d\n",peek(&s));
 	 printf("Poping from the stack : %d\n",pop(&s));
 	 printf("Now at the top of the stack we have : %d\n",peek(&s));
+	 printf("\n");
+	 printf("\n");
 
   // For testing pop
+  printf("Testing pop function.\n");
   push(&s, 4);
   printf("Now at the top of the stack we have : %d\n",peek(&s));
   printf("Poping from the stack : %d\n",pop(&s));
   printf("Now at the top of the stack we pop to get : %d\n",pop(&s));
+	 printf("\n");
+	 printf("\n");
 
 
   // For testing push function
+  printf("Testing push function.\n");
   int c = 0;
   for (int i = 6 + 0; i < 6 + 16; i++) {
 	  push(&s, i);
@@ -80,4 +83,3 @@ int main() {
   
   return 0;
 }
-*/
