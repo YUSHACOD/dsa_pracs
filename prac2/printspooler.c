@@ -1,88 +1,77 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
+#define MAX_QUEUE_SIZE 100
 typedef struct {
-  char *title;
-  int pages;
-} document;
-
-document *new(char *title, int pages){
-  document *doc = malloc(sizeof(document));
-  doc->title = title;
-  doc->pages = pages;
-  return doc;
-}
-
-void drop(document *doc) {
-  free(doc);
-}
-
+    char job_name[50];
+} PrintJob;
 typedef struct {
-  document **buffer;
-  size_t capacity;
-  size_t size;
-  size_t left;
-  size_t right;
-} spool;
-
-spool create_spool(size_t capacity) {
-  document **buffer = calloc(capacity, sizeof(document));  
-  spool queue = {
-    .buffer = buffer,
-    .capacity = capacity,
-    .size = 0,
-    .left = capacity - 1,
-    .right = capacity - 1,
-  };
-  return queue;
+    PrintJob items[MAX_QUEUE_SIZE];
+    int front, rear;
+} PrintQueue;
+void initQueue(PrintQueue *queue) {
+    queue->front = -1;
+    queue->rear = -1;
 }
-
-int checks(spool q) {
-  return 
-    q.left <= q.right &&
-    q.left >= 0 && q.right >= 0 &&
-    q.left < q.capacity && q.right < q.capacity;
+int isQueueEmpty(PrintQueue *queue) {
+    return (queue->front == -1);
 }
-
-void enqueue(spool *q, document *element) {
-  if (checks(*q) && q->left > 0) {
-    q->buffer[q->left] = element;
-    q->left -= 1;
-    q->size += 1;
-  } else {
-    puts("Cannot enqueue. Queue is full");
-  }
+int isQueueFull(PrintQueue *queue) {
+    return (queue->rear == MAX_QUEUE_SIZE - 1);
 }
-
-document *dequeue(spool *q) {
-  if (checks(*q) && q->right < q->capacity) {
-    document *d;
-    d = q->buffer[q->right];
-    q->right -= 1;
-    q->size -= 1;
-    return d;
-  } else {
-    puts("Cannot dequeue. Queue is empty");
-    return NULL;
-  }
-}
-
-int main() {
-  char *document_name[] = {"recipes", "DCIM 20231001_099", "DCIM 20231001_091", "Assignment - 5", "Assignment - 4"};
-  int pages[] = {12, 1, 1, 24, 20};
-
-  spool spool_queue = create_spool(9);
-  for(size_t i = 0; i < sizeof(pages)/sizeof(int); i += 1){
-    enqueue(&spool_queue, new(document_name[i], pages[i]));
-  }
-
-  for(size_t i = 0; i < 9; i += 1){
-    document *de = dequeue(&spool_queue);
-    if (de != NULL) {
-      printf("Document No: %d\n\tTitle:\t%s \n\tPages:\t%d\n", i + 1, de->title, de->pages);
+void enqueue(PrintQueue *queue, char *job_name) {
+    if (isQueueFull(queue)) {
+        printf("Queue is full. Cannot add more print jobs.\n");
     } else {
-      puts("Cannot dequeue. Queue is empty");
-      break;
+        if (isQueueEmpty(queue)) {
+            queue->front = 0;
+        }
+        queue->rear++;
+        strcpy(queue->items[queue->rear].job_name, job_name);
+        printf("Print job '%s' added to the queue.\n", job_name);
     }
-  }
+}
+void dequeue(PrintQueue *queue) {
+    if (isQueueEmpty(queue)) {
+        printf("Queue is empty. No print jobs to print.\n");
+    } else {
+        printf("Printing: %s\n", queue->items[queue->front].job_name);
+        if (queue->front == queue->rear) {
+            queue->front = queue->rear = -1;
+        } else {
+            queue->front++;
+        }
+    }
+}
+int main() {
+    PrintQueue queue;
+    initQueue(&queue);
+
+    while (1) {
+        printf("\nPrint Spooler Menu:\n");
+        printf("1. Add Print Job\n");
+        printf("2. Print Next Job\n");
+        printf("3. Quit\n");
+        int choice;
+        char job_name[50];
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                printf("Enter the print job name: ");
+                scanf("%s", job_name);
+                enqueue(&queue, job_name);
+                break;
+            case 2:
+                dequeue(&queue);
+                break;
+            case 3:
+                printf("Exiting the print spooler.\n");
+                exit(0);
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
+    return 0;
 }
