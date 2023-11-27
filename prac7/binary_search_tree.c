@@ -87,7 +87,7 @@ void traverse_LRN(node *root) {
 
 int main(int argc, char *argv[]) {
   b_tree t1 = {.root = NULL};
-  // create_tree(&t1, 4);
+  create_tree(&t1, 4);
 
   insert_node(t1.root, 5);
   insert_node(t1.root, 8);
