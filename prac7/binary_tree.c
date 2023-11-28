@@ -32,18 +32,19 @@ node *get_node(int data) {
 
 void create_tree(b_tree *tree, int data) {
   tree->root = get_node(data);
+  printf("Creating tree with root data : %d\n", data);
   tree->inorder_traversal[0] = data;
   tree->len = 1;
 }
 
 void destroy_tree(node *root) {
-	if (root != NULL) {
-		destroy_tree(root->left);
-		destroy_tree(root->right);
-		free(root);
-	} else {
-		return;
-	}
+  if (root != NULL) {
+    destroy_tree(root->left);
+    destroy_tree(root->right);
+    free(root);
+  } else {
+    return;
+  }
 }
 
 bool insert_node_aux(node *root, int *traversal, int start, int end,
@@ -54,18 +55,22 @@ bool insert_node_aux(node *root, int *traversal, int start, int end,
   } else if (start == end) {
     if (right) {
       root->right = get_node(traversal[mid]);
+      printf("Inserting node at right : %d\n", traversal[mid]);
       return true;
     } else {
       root->left = get_node(traversal[mid]);
+      printf("Inserting node at left : %d\n", traversal[mid]);
       return true;
     }
   } else {
     if (right) {
       root->right = get_node(traversal[mid]);
+      printf("Inserting node at right : %d\n", traversal[mid]);
       return (insert_node_aux(root->right, traversal, mid + 1, end, true)) &&
              (insert_node_aux(root->right, traversal, start, mid - 1, false));
     } else {
       root->left = get_node(traversal[mid]);
+      printf("Inserting node at left : %d\n", traversal[mid]);
       return (insert_node_aux(root->left, traversal, mid + 1, end, true)) &&
              (insert_node_aux(root->left, traversal, start, mid - 1, false));
     }
@@ -109,8 +114,10 @@ bool insert_node(b_tree *tree, int data) {
     insertion_sort(tree->inorder_traversal, tree->len);
 
     int mid = (tree->len - 1) / 2;
-	destroy_tree(tree->root);
+    destroy_tree(tree->root);
     tree->root = get_node(tree->inorder_traversal[mid]);
+    printf("Creating root : %d\n", tree->inorder_traversal[mid]);
+    print_array(tree->inorder_traversal, tree->len);
 
     return (insert_node_aux(tree->root, tree->inorder_traversal, mid + 1,
                             tree->len - 1, true)) &&
@@ -138,7 +145,6 @@ void traverse_NLR(node *root) {
     return;
   }
 }
-
 
 void traverse_LRN(node *root) {
   if (root != NULL) {

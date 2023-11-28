@@ -20,6 +20,7 @@ node *get_node(int data) {
 
   // Setting the data ///
   temp->data = data;
+  printf("Assigning node : %d\n", data);
   temp->left = NULL;
   temp->right = NULL;
   ///////////////////////
@@ -27,7 +28,9 @@ node *get_node(int data) {
   return temp;
 }
 
-void create_tree(b_tree *p, int data) { p->root = get_node(data); }
+void create_tree(b_tree *p, int data) {
+	printf("Creating tree with root data : %d\n", data);
+	p->root = get_node(data); }
 
 int insert_node(node *root, int data) {
   if (root == NULL) {
